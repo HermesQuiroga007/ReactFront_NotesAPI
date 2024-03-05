@@ -7,6 +7,92 @@
   pointer-events: none;
 }
 
+/* Estilos para las cards */
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px #fbff00;
+  opacity: 98%;
+}
+
+.container {
+  padding: 18px;
+  gap: 10px;
+}
+
+.card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0px 0px 17px orange;
+  padding: 14px;
+  border-radius: 4mm;
+  background: rgb(255, 162, 0);
+  background: linear-gradient(50deg, rgba(255, 162, 0, 1) 0%, rgba(255, 162, 0, 1) 5%, rgba(255, 255, 255, 1) 5%, rgba(255, 255, 255, 1) 7%, rgba(255, 162, 0, 1) 7%, rgba(255, 162, 0, 1) 9%, rgba(255, 255, 255, 1) 9%, rgba(255, 255, 255, 1) 90%, rgba(255, 162, 0, 1) 90%, rgba(255, 162, 0, 1) 92%, rgba(255, 255, 255, 1) 92%, rgba(255, 255, 255, 1) 94%, rgba(255, 162, 0, 1) 94%, rgba(255, 162, 0, 1) 100%);
+}
+
+.card-body {
+  padding: 20px;
+  border: none;
+
+}
+
+#newNotes {
+  width: 90%;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.description {
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 3mm;
+  background-color: #fbff0041;
+}
+
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  margin: 5px;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #333;
+}
+
+.btn-warning:hover {
+  background-color: #ffcd39;
+  border-color: #ffcd39;
+  color: #333;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -32,6 +118,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
