@@ -1,25 +1,37 @@
 import './App.css';
 import { Component } from 'react';
-import deleteNote from './components/DeleteNoteService'; // Importa la función deleteNote
+import deleteNote from './components/DeleteNoteService';
 import addNote from './components/AddNoteService';
 import updateNote from './components/UpdateNoteService';
+import Register from './components/Register';
+import Login from './components/Login';
+import Home from './components/Home';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import NotesContainer from './components/NotesContainer';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      notes: []
+      notes: [],
+      isAuthenticated: false,
+      token: null
     };
     this.API_URL = "http://localhost:5267/";
   }
 
   componentDidMount() {
-    this.refreshNotes();
+    if (this.state.isAuthenticated) {
+      this.refreshNotes();
+    }
   }
 
-
   refreshNotes = () => {
-    fetch(this.API_URL + "api/todoapp/GetNotes")
+    fetch(this.API_URL + "api/todoapp/GetNotes", {
+      headers: {
+        Authorization: `Bearer ${this.state.token}` // Enviar el token en el encabezado de autorización
+      }
+    })
       .then(response => response.json())
       .then(data => {
         this.setState({ notes: data });
@@ -27,75 +39,98 @@ class App extends Component {
       .catch(error => console.error('Error fetching notes:', error));
   }
 
-
   addClick = (newNote) => {
-    // Llama a la función addNote y pasa la nota y refreshNotes como argumentos
-    addNote(newNote, this.refreshNotes);
+    // Obtener el token de localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token not found');
+      return;
+    }
+    // Llamar a addNote pasando el token
+    addNote(newNote, token, this.refreshNotes);
   }
 
+
   deleteClick = (id) => {
-    // Llama a la función deleteNote y pasa la función refreshNotes como argumento
-    deleteNote(id, this.refreshNotes);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token not found');
+      return;
+    }
+    // Llamar a deleteNote pasando el token
+    deleteNote(id, token, this.refreshNotes);
   }
 
   updateClick = (id) => {
-    // Llama a la función updateNote y pasa el id y refreshNotes como argumentos
-    updateNote(id, this.refreshNotes);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token not found');
+      return;
+    }
+    // Llamar a updateNote pasando el token
+    updateNote(id, token, this.refreshNotes);
+  }
+
+  handleLogin = (token) => {
+    // Actualizar el estado de autenticación y el token después de un inicio de sesión exitoso
+    this.setState({ isAuthenticated: true, token: token }, () => {
+      this.refreshNotes(); // Actualizar las notas después del inicio de sesión
+    });
+  }
+
+  handleLogout = () => {
+    // Limpiar el token de autenticación del almacenamiento local
+    localStorage.removeItem('token');
+    // Establecer el estado de autenticación en falso y limpiar el token
+    this.setState({ isAuthenticated: false, token: null, notes: [] });
   }
 
   render() {
-    const { notes } = this.state;
+    const { notes, isAuthenticated } = this.state;
     return (
-      <div className="container">
-        <h2 className="mb-4 text-center" style={{ paddingTop: '20px', color: '#0D6EFD', fontFamily: 'sans-serif' }}>Notas</h2>
-        <div className="input-group mb-3" style={{ justifyContent: 'center', paddingBottom: '10px', flexWrap: 'nowrap' }}>
-          <input style={{ borderColor: '#0D6EFD' }}
-            id="newNotes"
-            type="text"
-            className="form-control"
-            placeholder="Enter your note"
-            aria-label="Note"
-            aria-describedby="add-note-btn"
-            ref={input => this.newNoteInput = input} // Referencia al input
-          />
-          <div className="input-group-append">
-            <button style={{ marginLeft: '0px', margin: '0px' }}
-              className="btn btn-outline-primary"
-              type="button"
-              id="add-note-btn"
-              onClick={() => this.addClick(this.newNoteInput.value)} // Llama a addClick con el valor del input
-            >Add Note</button>
-          </div>
-        </div>
-        <div className="row">
-          {notes.length === 0 ? (
-            <div className="col-md-12 text-center" style={{ padding: '5%' }}>
-
-              <h4 style={{ color: '#0D6EFD' }}><strong>No hay notas disponibles</strong></h4>
-
-            </div>
-          ) : (
-            notes.map(note =>
-              <div key={note.id} className="col-md-4 mb-4" style={{ paddingTop: '10px' }}>
-                <div className="card" style={{ border: 'none', borderRadius: '3mm' }}>
-                  <div className="card-body">
-                    <div className="description">
-                      <h5 className="card-title text-center">{note.description}</h5>
-                    </div>
-                    <div className="buttons text-center">
-                      <button className="btn btn-outline-success btn-sm" onClick={() => this.updateClick(note.id)}>Update</button>
-                      <button className="btn btn-outline-danger btn-sm" onClick={() => this.deleteClick(note.id)}>Delete</button>
-                    </div>
+      <BrowserRouter>
+        <div>
+          <div className="App">
+            <header className="text-white" style={{ backgroundColor: '#D6EFF6' }}>
+              <div className="container">
+                <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                  <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><Link to="/" className="nav-link text-dark"><strong>Home</strong></Link></li>
+                  </ul>
+                  <div className="text-end">
+                    {!isAuthenticated && (
+                      <Link to="/login" className="btn btn-outline-dark me-2">Login</Link>
+                    )}
+                    {!isAuthenticated && (
+                      <Link to="/register" className="btn btn-outline-dark me-2">Register</Link>
+                    )}
+                    {isAuthenticated && (
+                      <button className="btn btn-outline-dark me-2" onClick={this.handleLogout}>Logout</button>
+                    )}
                   </div>
                 </div>
               </div>
-            )
+            </header>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              {isAuthenticated ? null : <Route path="/login" element={<Login onLogin={this.handleLogin} />} />}
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </div>
+          {isAuthenticated && (
+            <div className="App">
+              <NotesContainer
+                notes={notes}
+                addClick={this.addClick}
+                deleteClick={this.deleteClick}
+                updateClick={this.updateClick}
+              />
+            </div>
           )}
         </div>
-      </div>
+      </BrowserRouter>
     );
   }
 }
-
 
 export default App;

@@ -2,7 +2,7 @@ import Swal from 'sweetalert2';
 
 const API_URL = "http://localhost:5267/";
 
-const updateNote = (id, refreshNotes) => {
+const updateNote = (id, token, refreshNotes) => {
   Swal.fire({
     title: '¿Estás seguro?',
     text: '¿Quieres actualizar la nota?',
@@ -14,7 +14,11 @@ const updateNote = (id, refreshNotes) => {
     cancelButtonText: 'Cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
-      fetch(API_URL + "api/todoapp/GetNotes")
+      fetch(API_URL + "api/todoapp/GetNotes", {
+        headers: {
+          Authorization: `Bearer ${token}` // Agregar el token al encabezado de autorización
+        }
+      })
         .then(response => response.json())
         .then(data => {
           const note = data.find(note => note.id === id);
@@ -41,7 +45,8 @@ const updateNote = (id, refreshNotes) => {
                 fetch(API_URL + "api/todoapp/UpdateNotes?id=" + id + "&newDescription=" + result.value, {
                   method: "PUT",
                   headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}` // Agregar el token al encabezado de autorización
                   }
                 })
                   .then(res => res.text())

@@ -2,7 +2,7 @@ import Swal from 'sweetalert2';
 
 const API_URL = "http://localhost:5267/";
 
-const addNote = (newNote, refreshNotes) => {
+const addNote = (newNote, token, refreshNotes) => {
   // Verifica si el campo está vacío
   if (!newNote.trim()) {
     Swal.fire({
@@ -18,7 +18,10 @@ const addNote = (newNote, refreshNotes) => {
 
   fetch(API_URL + "api/todoapp/AddNotes", {
     method: "POST",
-    body: data
+    body: data,
+    headers: {
+      Authorization: `Bearer ${token}` // Agregar el token al encabezado de autorización
+    }
   })
     .then(res => res.json())
     .then(result => {

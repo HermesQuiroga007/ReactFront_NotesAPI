@@ -7,8 +7,48 @@
   pointer-events: none;
 }
 
+body {
+  background-color: #333;
+}
+
+.btnlr {
+  background-color: #a3ebff !important;
+}
+
+.btnlr:hover {
+  background-color: #00c8ff !important;
+  color: white !important;
+}
+
+.clr {
+  margin-top: 3% !important;
+  margin-bottom: 4% !important;
+  padding-bottom: 9% !important;
+}
+
+.f2 {
+  bottom: 0;
+  width: 100%;
+  background-color: #D6EFF6;
+  padding: 1%;
+}
+
+.card2 {
+  border-radius: 14px !important;
+  background-color: #fff;
+  box-shadow: 0px 0px 31px #76e1ff;
+  border: none !important;
+}
+
+.ch {
+  border: none !important;
+  background-color: #D6EFF6 !important;
+  border-top-left-radius: 14px !important;
+  border-top-right-radius: 14px !important;
+}
+
 /* Estilos para las cards */
-.card {
+.card1 {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
@@ -22,7 +62,7 @@
   gap: 10px;
 }
 
-.card:hover {
+.card1:hover {
   transform: translateY(-7px);
   box-shadow: 0px 0px 17px orange;
   padding: 14px;

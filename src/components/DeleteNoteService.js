@@ -2,16 +2,16 @@ import Swal from 'sweetalert2';
 
 const API_URL = "http://localhost:5267/";
 
-const deleteNote = (id, refreshNotes) => {
+const deleteNote = (id, token, refreshNotes) => {
   fetch(API_URL + "api/todoapp/DeleteNotes?id=" + id, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}` // Agregar el token al encabezado de autorización
+    }
   })
     .then(res => res.json())
     .then(result => {
-      // Mostrar mensaje de confirmación utilizando Swal
       Swal.fire(result);
-      
-      // Actualizar las notas después de eliminar una
       refreshNotes();
     })
     .catch(error => console.error('Error deleting note:', error));
