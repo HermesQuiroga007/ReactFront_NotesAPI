@@ -1,4 +1,5 @@
 import React from 'react';
+import Swal from 'sweetalert2';
 import '../App.css';
 
 class NotesContainer extends React.Component {
@@ -9,14 +10,43 @@ class NotesContainer extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // Iniciar temporizador para mostrar la alerta después de 50 segundos
+    this.startAlertTimer();
+  }
+
+  startAlertTimer = () => {
+    setTimeout(() => {
+      // Mostrar la alerta con SweetAlert2
+      this.showSessionExpirationAlert();
+    }, 50000); // 50 segundos
+
+    // Redirigir a la página de inicio de sesión después de 70 segundos
+    setTimeout(() => {
+      window.location.href = '/login'; // Cambia '/login' por la ruta de tu página de inicio de sesión
+    }, 70000); // 10 segundos después de que se muestre la alerta
+  };
+
+  showSessionExpirationAlert = () => {
+    // Mostrar la alerta con SweetAlert2
+    Swal.fire({
+      title: 'Sesión a punto de expirar',
+      text: 'Su sesión está a punto de expirar',
+      timer: 10000, // 10 segundos
+      icon: 'warning',
+      showCancelButton: false,
+      showConfirmButton: true
+    });
+  };
+
   render() {
     const { notes, addClick, deleteClick, updateClick } = this.props;
     return (
-      <div>
-        <div className="container clr">
-          <h2 className="mb-4 text-center" style={{ paddingTop: '20px', color: '#0D6EFD', fontFamily: 'sans-serif' }}>Notas</h2>
+      <div className='bgnc'>
+        <div className="container">
+          <h2 className="mb-4 text-center" style={{ paddingTop: '20px', color: 'white', fontFamily: 'sans-serif' }}>Notas</h2>
           <div className="input-group mb-3" style={{ justifyContent: 'center', paddingBottom: '10px', flexWrap: 'nowrap' }}>
-            <input style={{ borderColor: '#0D6EFD' }}
+            <input
               id="newNotes"
               type="text"
               className="form-control"
@@ -24,20 +54,30 @@ class NotesContainer extends React.Component {
               aria-label="Note"
               aria-describedby="add-note-btn"
               ref={input => this.newNoteInput = input}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') {
+                  addClick(this.newNoteInput.value);
+                  this.newNoteInput.value = ''; // Limpiar el campo de entrada después de agregar la nota
+                }
+              }}
             />
             <div className="input-group-append">
-              <button style={{ marginLeft: '0px', margin: '0px' }}
-                className="btn btn-outline-primary"
+              <button
+                style={{ marginLeft: '0px', margin: '0px' }}
+                className="btn btn-outline-light"
                 type="button"
                 id="add-note-btn"
                 onClick={() => addClick(this.newNoteInput.value)}
-              >Add Note</button>
+              >
+                Añadir
+              </button>
             </div>
           </div>
+
           <div className="row">
             {notes.length === 0 ? (
               <div className="col-md-12 text-center" style={{ padding: '5%' }}>
-                <h4 style={{ color: '#0D6EFD' }}><strong>No hay notas disponibles</strong></h4>
+                <h4 style={{ color: 'white' }}><strong>No hay notas disponibles</strong></h4>
               </div>
             ) : (
               notes.map(note =>
@@ -59,13 +99,6 @@ class NotesContainer extends React.Component {
           </div>
 
         </div>
-        <footer className="f2">
-          <div className="container">
-            <div className="text-center text-dark">
-              <p className="mb-0">¡Happy Hacking!</p>
-            </div>
-          </div>
-        </footer>
       </div>
     );
   }

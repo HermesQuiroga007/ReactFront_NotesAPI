@@ -89,13 +89,13 @@ class App extends Component {
     const { notes, isAuthenticated } = this.state;
     return (
       <BrowserRouter>
-        <div>
-          <div className="App">
+        <div className='bg'>
+          <div className="">
             <header className="text-white" style={{ backgroundColor: '#D6EFF6' }}>
               <div className="container">
                 <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                   <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><Link to="/" className="nav-link text-dark"><strong>Home</strong></Link></li>
+                    <li><Link to="/" className="chn text-dark"><strong>Home</strong></Link></li>
                   </ul>
                   <div className="text-end">
                     {!isAuthenticated && (

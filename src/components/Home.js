@@ -2,7 +2,7 @@ import React from 'react'
 
 const Home = () => {
   return (
-    <div>
+    <div id='home'>
       <header className="bg-dark py-5">
         <div className="container px-4 px-lg-5 my-5">
           <div className="text-center text-white">
@@ -11,7 +11,7 @@ const Home = () => {
           </div>
         </div>
       </header>
-      <section className="py-1" style={{ backgroundColor: '#D6EFF6' }}>
+      <section>
         <div className="container px-3 px-lg-5 mt-5">
           <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             <div className="col mb-5">
@@ -51,13 +51,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <footer className="py-4 f1 bg-dark">
-        <div className="container px-4 px-lg-5 my-5">
-          <div className="text-center text-white">
-            <p className="mb-0">¡Happy Hacking!</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

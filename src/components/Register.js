@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error] = useState('');
 
   const handleRegister = async () => {
     try {
@@ -21,45 +21,41 @@ function Register() {
           window.location.href = '/login';
         });
       } else {
-        setError('Error al registrar usuario');
+        throw new Error('Error al registrar usuario');
       }
     } catch (err) {
-      setError('Error al registrar usuario');
+      // Mostrar mensaje de error utilizando SweetAlert2
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al registrar usuario',
+        text: 'Ha ocurrido un error al intentar registrar el usuario. Por favor, inténtelo de nuevo más tarde.',
+        confirmButtonColor: '#dc3545' // Color del botón de confirmación
+      });
     }
   };
+
 
   return (
     <div>
       <div className="container clr">
         <div className="row justify-content-center">
-          <div className="col-md-6">
+          <div className="col-md-6 cardp">
             <div className="card card2">
-              <div className="card-header ch"><strong>Registro</strong></div>
+              <div className="card-header ch text-dark"><strong>Registro</strong></div>
               <div className="card-body cb">
                 {error && <p className="text-danger">{error}</p>}
                 <div className="mb-3">
-                  <label htmlFor="email" className="form-label">Correo electrónico</label>
-                  <input type="email" className="form-control" id="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <input type="email" className="form-control ipt" id="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="password" className="form-label">Contraseña</label>
-                  <input type="password" className="form-control" id="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
+                  <input type="password" className="form-control ipt" id="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
-                <div className="text-center">
-                  <button className="btn btnlr" onClick={handleRegister}>Registrarse</button>
-                </div>
+                <button className="btn btnlr" onClick={handleRegister}>Registrarse</button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <footer className="f2">
-        <div className="container">
-          <div className="text-center text-dark">
-            <p className="mb-0">¡Happy Hacking!</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
