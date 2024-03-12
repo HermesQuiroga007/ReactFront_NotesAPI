@@ -13,7 +13,7 @@ function Login({ onLogin }) {
       const { Token } = response.data; // Extraer el token de la respuesta
       localStorage.setItem('token', Token); // Almacenar el token en localStorage
       setError('');
-      onLogin(Token); // Llamar a la función onLogin pasando el token
+      onLogin(Token, email); // Llamar a la función onLogin pasando el token y el correo electrónico
     } catch (err) {
       // Mostrar mensaje de error utilizando SweetAlert2
       Swal.fire({
@@ -27,28 +27,23 @@ function Login({ onLogin }) {
 
 
   return (
-    <div>
-      <div className="container clr">
-        <div className="row justify-content-center">
-          <div className="col-md-6 cardp">
-            <div className="card card2">
-              <div className="card-header ch text-dark"><strong>Login</strong></div>
-              <div className="card-body cb">
-                {error && <div className="alert alert-danger" role="alert">{error}</div>}
-                <div className="mb-3">
-                  <input type="email" className="form-control ipt" id="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div className="mb-3">
 
-                  <input type="password" className="form-control ipt" id="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </div>
-                <button type="button" className="btn btnlr" onClick={handleLogin}>Iniciar sesión</button>
-              </div>
-            </div>
+    <div className="container">
+      <div className="card card2">
+        <div className="card-header ch text-dark"><strong>Login</strong></div>
+        <div className="card-body cb">
+          {error && <div className="alert alert-danger" role="alert">{error}</div>}
+          <div className="mb-3">
+            <input type="email" className="form-control ipt" id="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
+          <div className="mb-3">
+            <input type="password" className="form-control ipt" id="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
+          </div>
+          <button type="button" className="btn btnlr" onClick={handleLogin}>Iniciar sesión</button>
         </div>
       </div>
     </div>
+
   );
 }
 

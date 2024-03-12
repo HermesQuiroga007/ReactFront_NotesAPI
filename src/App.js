@@ -8,14 +8,18 @@ import Login from './components/Login';
 import Home from './components/Home';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import NotesContainer from './components/NotesContainer';
+import imagen from './img/user.png';
+import Swal from 'sweetalert2';
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.handleLogout = this.handleLogout.bind(this);
     this.state = {
       notes: [],
       isAuthenticated: false,
-      token: null
+      token: null,
+      showUserInfo: false // Nuevo estado para controlar la visibilidad del panel de información del usuario
     };
     this.API_URL = "http://localhost:5267/";
   }
@@ -71,22 +75,51 @@ class App extends Component {
     updateNote(id, token, this.refreshNotes);
   }
 
-  handleLogin = (token) => {
-    // Actualizar el estado de autenticación y el token después de un inicio de sesión exitoso
-    this.setState({ isAuthenticated: true, token: token }, () => {
+  handleLogin = (token, email) => {
+    // Actualizar el estado de autenticación, el token y el correo electrónico después de un inicio de sesión exitoso
+    this.setState({ isAuthenticated: true, token: token, emailUsuario: email }, () => {
       this.refreshNotes(); // Actualizar las notas después del inicio de sesión
     });
   }
 
+
   handleLogout = () => {
-    // Limpiar el token de autenticación del almacenamiento local
-    localStorage.removeItem('token');
-    // Establecer el estado de autenticación en falso y limpiar el token
-    this.setState({ isAuthenticated: false, token: null, notes: [] });
+    // Mostrar la alerta de confirmación de SweetAlert
+    Swal.fire({
+      icon: 'warning',
+      title: '¿Estás seguro de cerrar sesión?',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Limpiar el token de autenticación del almacenamiento local
+        localStorage.removeItem('token');
+        // Establecer el estado de autenticación en falso y limpiar el token
+        this.setState({ isAuthenticated: false, token: null, notes: [] });
+
+        // Mostrar la alerta de SweetAlert
+        Swal.fire({
+          icon: 'success',
+          title: '¡Sesión cerrada!',
+          text: 'Tu sesión ha sido cerrada correctamente.',
+          timer: 1000, // 5 segundos
+          showConfirmButton: false
+        });
+      }
+    });
+  }
+
+
+
+  toggleUserInfo = () => {
+    this.setState(prevState => ({
+      showUserInfo: !prevState.showUserInfo
+    }));
   }
 
   render() {
-    const { notes, isAuthenticated } = this.state;
+    const { notes, isAuthenticated, showUserInfo } = this.state;
     return (
       <BrowserRouter>
         <div className='bg'>
@@ -95,18 +128,33 @@ class App extends Component {
               <div className="container">
                 <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                   <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><Link to="/" className="chn text-dark"><strong>Home</strong></Link></li>
+                    <li><Link to="/" className="chn text-dark m-1"><strong>Home</strong></Link></li>
                   </ul>
                   <div className="text-end">
                     {!isAuthenticated && (
-                      <Link to="/login" className="btn btn-outline-dark me-2">Login</Link>
+                      <Link to="/login" className="btn btn-outline-dark m-1">Login</Link>
                     )}
                     {!isAuthenticated && (
-                      <Link to="/register" className="btn btn-outline-dark me-2">Register</Link>
+                      <Link to="/register" className="btn btn-outline-dark m-1">Register</Link>
                     )}
+
                     {isAuthenticated && (
-                      <button className="btn btn-outline-dark me-2" onClick={this.handleLogout}>Logout</button>
+                      <div className='btnout'>
+                        <div className='dropdown'>
+                          <a href='#' className='button y-3' onClick={this.toggleUserInfo}>
+                            <img className='imgapp' src={imagen} alt="Descripción de la imagen" height={'24px'} width={'24px'} />
+                          </a>
+                          {showUserInfo && (
+                            <div className="panelUsuario text-black">
+                              <p>Tu email es: {this.state.emailUsuario || 'Correo no disponible'}</p>
+                            </div>
+                          )}
+                        </div>
+                        <button className="btn btn-outline-dark m-1" onClick={this.handleLogout}>Logout</button>
+                      </div>
+
                     )}
+
                   </div>
                 </div>
               </div>

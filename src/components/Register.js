@@ -36,27 +36,23 @@ function Register() {
 
 
   return (
-    <div>
-      <div className="container clr">
-        <div className="row justify-content-center">
-          <div className="col-md-6 cardp">
-            <div className="card card2">
-              <div className="card-header ch text-dark"><strong>Registro</strong></div>
-              <div className="card-body cb">
-                {error && <p className="text-danger">{error}</p>}
-                <div className="mb-3">
-                  <input type="email" className="form-control ipt" id="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div className="mb-3">
-                  <input type="password" className="form-control ipt" id="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </div>
-                <button className="btn btnlr" onClick={handleRegister}>Registrarse</button>
-              </div>
-            </div>
+
+    <div className="container">
+      <div className="card card2">
+        <div className="card-header ch text-dark"><strong>Registro</strong></div>
+        <div className="card-body cb">
+          {error && <p className="text-danger">{error}</p>}
+          <div className="mb-3">
+            <input type="email" className="form-control ipt" id="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
+          <div className="mb-3">
+            <input type="password" className="form-control ipt" id="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
+          </div>
+          <button className="btn btnlr" onClick={handleRegister}>Registrarse</button>
         </div>
       </div>
     </div>
+
   );
 }
 
