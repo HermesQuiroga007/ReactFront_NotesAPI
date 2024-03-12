@@ -8,6 +8,8 @@ class NotesContainer extends React.Component {
     this.state = {
       newNoteInput: ''
     };
+    this.alertTimer = null; // Guardar el temporizador en una variable de instancia
+    this.redirectTimer = null; // Guardar el temporizador de redirección en una variable de instancia
   }
 
   componentDidMount() {
@@ -15,16 +17,30 @@ class NotesContainer extends React.Component {
     this.startAlertTimer();
   }
 
+  componentWillUnmount() {
+    // Limpiar temporizadores al desmontar el componente
+    clearTimeout(this.alertTimer);
+    clearTimeout(this.redirectTimer);
+  }
+
   startAlertTimer = () => {
-    setTimeout(() => {
+    this.alertTimer = setTimeout(() => {
       // Mostrar la alerta con SweetAlert2
       this.showSessionExpirationAlert();
     }, 50000); // 50 segundos
 
-    // Redirigir a la página de inicio de sesión después de 70 segundos
-    setTimeout(() => {
+    this.redirectTimer = setTimeout(() => {
       window.location.href = '/login'; // Cambia '/login' por la ruta de tu página de inicio de sesión
-    }, 70000); // 10 segundos después de que se muestre la alerta
+    }, 62000); // 10 segundos después de que se muestre la alerta
+  };
+
+  handleLogout = () => {
+    // Limpiar temporizadores al hacer clic en el botón de "Logout"
+    clearTimeout(this.alertTimer);
+    clearTimeout(this.redirectTimer);
+    // Aquí debes agregar la lógica para cerrar sesión
+    // Por ejemplo, puedes llamar a una función en tu componente padre que maneje el proceso de cierre de sesión
+    // this.props.handleLogout();
   };
 
   showSessionExpirationAlert = () => {
@@ -32,7 +48,7 @@ class NotesContainer extends React.Component {
     Swal.fire({
       title: 'Sesión a punto de expirar',
       text: 'Su sesión está a punto de expirar',
-      timer: 10000, // 10 segundos
+      timer: 5000, // 5 segundos
       icon: 'warning',
       showCancelButton: false,
       showConfirmButton: true
@@ -68,8 +84,7 @@ class NotesContainer extends React.Component {
                 type="button"
                 id="add-note-btn"
                 onClick={() => addClick(this.newNoteInput.value)}
-              >
-                Añadir
+              >Añadir
               </button>
             </div>
           </div>
@@ -97,7 +112,6 @@ class NotesContainer extends React.Component {
               )
             )}
           </div>
-
         </div>
       </div>
     );
