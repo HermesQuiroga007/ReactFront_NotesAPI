@@ -1,5 +1,5 @@
 import './App.css';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import deleteNote from './components/DeleteNoteService';
 import addNote from './components/AddNoteService';
 import updateNote from './components/UpdateNoteService';
@@ -8,8 +8,8 @@ import Login from './components/Login';
 import Home from './components/Home';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import NotesContainer from './components/NotesContainer';
-import imagen from './img/user.png';
 import Swal from 'sweetalert2';
+import imagen from './img/conf.png';
 
 class App extends Component {
   constructor(props) {
@@ -22,12 +22,18 @@ class App extends Component {
       showUserInfo: false // Nuevo estado para controlar la visibilidad del panel de información del usuario
     };
     this.API_URL = "http://localhost:5267/";
+    this.dropdownRef = React.createRef();
   }
 
   componentDidMount() {
     if (this.state.isAuthenticated) {
       this.refreshNotes();
     }
+    document.addEventListener("mousedown", this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleClickOutside);
   }
 
   refreshNotes = () => {
@@ -53,7 +59,6 @@ class App extends Component {
     // Llamar a addNote pasando el token
     addNote(newNote, token, this.refreshNotes);
   }
-
 
   deleteClick = (id) => {
     const token = localStorage.getItem('token');
@@ -82,7 +87,6 @@ class App extends Component {
     });
   }
 
-
   handleLogout = () => {
     // Mostrar la alerta de confirmación de SweetAlert
     Swal.fire({
@@ -110,13 +114,17 @@ class App extends Component {
     });
   }
 
-
+  handleClickOutside = (event) => {
+    if (this.dropdownRef.current && !this.dropdownRef.current.contains(event.target)) {
+      this.setState({ showUserInfo: false });
+    }
+  };
 
   toggleUserInfo = () => {
     this.setState(prevState => ({
       showUserInfo: !prevState.showUserInfo
     }));
-  }
+  };
 
   render() {
     const { notes, isAuthenticated, showUserInfo } = this.state;
@@ -139,20 +147,17 @@ class App extends Component {
                     )}
 
                     {isAuthenticated && (
-                      <div className='btnout'>
-                        <div className='dropdown'>
-                          <a href='#' className='button y-3' onClick={this.toggleUserInfo}>
-                            <img className='imgapp' src={imagen} alt="Descripción de la imagen" height={'24px'} width={'24px'} />
-                          </a>
-                          {showUserInfo && (
-                            <div className="panelUsuario text-black">
-                              <p>Tu email es: {this.state.emailUsuario || 'Correo no disponible'}</p>
-                            </div>
-                          )}
-                        </div>
-                        <button className="btn btn-outline-dark m-1" onClick={this.handleLogout}>Logout</button>
+                      <div ref={this.dropdownRef} className='dropdown'>
+                        <button className='button bg-transparent' onClick={this.toggleUserInfo}>
+                          <img className='imgapp' src={imagen} alt="Descripción de la imagen" height={'30px'} width={'30px'} />
+                        </button>
+                        {showUserInfo && (
+                          <div className="panelUsuario text-white">
+                            <p>Bienvenido {this.state.emailUsuario || 'Correo no disponible'}</p>
+                            <button className="btn btb m-2" onClick={this.handleLogout}>Logout</button>
+                          </div>
+                        )}
                       </div>
-
                     )}
 
                   </div>
