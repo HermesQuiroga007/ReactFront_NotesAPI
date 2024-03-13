@@ -1,4 +1,5 @@
-import './App.css';
+import './css/App.css';
+import './css/Notes.css';
 import React, { Component } from 'react';
 import deleteNote from './components/DeleteNoteService';
 import addNote from './components/AddNoteService';
@@ -6,10 +7,10 @@ import updateNote from './components/UpdateNoteService';
 import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import NotesContainer from './components/NotesContainer';
 import Swal from 'sweetalert2';
-import imagen from './img/conf.png';
+import HeaderContainer from './components/HeaderContainer';
 
 class App extends Component {
   constructor(props) {
@@ -29,11 +30,6 @@ class App extends Component {
     if (this.state.isAuthenticated) {
       this.refreshNotes();
     }
-    document.addEventListener("mousedown", this.handleClickOutside);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("mousedown", this.handleClickOutside);
   }
 
   refreshNotes = () => {
@@ -114,12 +110,6 @@ class App extends Component {
     });
   }
 
-  handleClickOutside = (event) => {
-    if (this.dropdownRef.current && !this.dropdownRef.current.contains(event.target)) {
-      this.setState({ showUserInfo: false });
-    }
-  };
-
   toggleUserInfo = () => {
     this.setState(prevState => ({
       showUserInfo: !prevState.showUserInfo
@@ -132,38 +122,13 @@ class App extends Component {
       <BrowserRouter>
         <div className='bg'>
           <div className="">
-            <header className="text-white" style={{ backgroundColor: '#D6EFF6' }}>
-              <div className="container">
-                <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                  <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><Link to="/" className="chn text-dark m-1"><strong>Home</strong></Link></li>
-                  </ul>
-                  <div className="text-end">
-                    {!isAuthenticated && (
-                      <Link to="/login" className="btn btn-outline-dark m-1">Login</Link>
-                    )}
-                    {!isAuthenticated && (
-                      <Link to="/register" className="btn btn-outline-dark m-1">Register</Link>
-                    )}
-
-                    {isAuthenticated && (
-                      <div ref={this.dropdownRef} className='dropdown'>
-                        <button className='button bg-transparent' onClick={this.toggleUserInfo}>
-                          <img className='imgapp' src={imagen} alt="Descripción de la imagen" height={'30px'} width={'30px'} />
-                        </button>
-                        {showUserInfo && (
-                          <div className="panelUsuario text-white">
-                            <p>Bienvenido {this.state.emailUsuario || 'Correo no disponible'}</p>
-                            <button className="btn btb m-2" onClick={this.handleLogout}>Logout</button>
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                  </div>
-                </div>
-              </div>
-            </header>
+            <HeaderContainer
+              isAuthenticated={isAuthenticated}
+              emailUsuario={this.state.emailUsuario}
+              toggleUserInfo={this.toggleUserInfo}
+              showUserInfo={showUserInfo}
+              handleLogout={this.handleLogout}
+            />
             <Routes>
               <Route path="/" element={<Home />} />
               {isAuthenticated ? null : <Route path="/login" element={<Login onLogin={this.handleLogin} />} />}

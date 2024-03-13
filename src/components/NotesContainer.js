@@ -1,6 +1,6 @@
 import React from 'react';
 import Swal from 'sweetalert2';
-import '../App.css';
+import '../css/App.css';
 
 class NotesContainer extends React.Component {
   constructor(props) {

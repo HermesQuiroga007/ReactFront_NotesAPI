@@ -7,6 +7,10 @@ function Register() {
   const [password, setPassword] = useState('');
   const [error] = useState('');
 
+  //handleRegister: Esta función maneja el proceso de registro de un nuevo usuario, 
+  //que también puede implicar múltiples pasos, como validar los datos de entrada, 
+  //enviar una solicitud al servidor, etc.
+
   const handleRegister = async () => {
     try {
       const response = await axios.post('http://localhost:5267/api/Auth/RegisterUser', { email, password });
@@ -34,6 +38,15 @@ function Register() {
     }
   };
 
+  //"handle" se usa como un prefijo para 
+  //indicar que una función o método está diseñado para manejar 
+  //eventos específicos o realizar acciones relacionadas con el manejo de eventos.
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleRegister();
+    }
+  };
 
   return (
 
@@ -43,16 +56,34 @@ function Register() {
         <div className="card-body cb">
           {error && <p className="text-danger">{error}</p>}
           <div className="mb-3">
-            <input type="email" className="form-control ipt" id="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input
+              type="email"
+              className="form-control ipt"
+              id="email"
+              placeholder="Correo electrónico"
+              value={email} onChange={(e) => setEmail(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
           </div>
           <div className="mb-3">
-            <input type="password" className="form-control ipt" id="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input
+              type="password"
+              className="form-control ipt"
+              id="password"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
           </div>
-          <button className="btn btnlr" onClick={handleRegister}>Registrarse</button>
+          <button
+            className="btn btnlr"
+            onClick={handleRegister}
+          >Registrarse
+          </button>
         </div>
       </div>
     </div>
-
   );
 }
 

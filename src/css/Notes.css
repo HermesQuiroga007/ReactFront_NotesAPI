@@ -1,0 +1,42 @@
+.panelUsuario {
+  position: absolute;
+  background: url(../img/moon.png);
+  box-shadow: 0px 0px 14px white;
+  font-family: 'Arial', sans-serif;
+  backdrop-filter: blur(7px);
+  transform: translateX(-50%);
+  background-position: left;
+  background-size: cover;
+  top: calc(100% + 30px);
+  border-radius: 100%;
+  font-size: medium;
+  font-weight: bold;
+  text-align: center;
+  min-width: 160px;
+  padding: 154%;
+  z-index: 999;
+  opacity: 98%;
+  left: 50%;
+}
+
+.btb {
+  box-shadow: 0px 0px 12px white !important;
+  background-color: #5f5f5d !important;
+  color: white !important;
+  border: none !important;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin: auto;
+}
+
+.btb:hover {
+  background-color: #2b2b2b !important;
+  color: white !important;
+}
+
+.dropdown:hover .panelUsuario {
+  display: block;
+}
