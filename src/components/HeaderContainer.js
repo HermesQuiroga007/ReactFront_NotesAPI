@@ -9,11 +9,11 @@ class HeaderContainer extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener('mouseup', this.handleClickOutside);
+        document.addEventListener('mousedown', this.handleClickOutside);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('mouseup', this.handleClickOutside);
+        document.removeEventListener('mousedown', this.handleClickOutside);
     }
 
     handleClickOutside = event => {
@@ -22,8 +22,15 @@ class HeaderContainer extends Component {
         }
     };
 
+    handleLogoutClick = () => {
+        // Ocultar el menú desplegable al hacer clic en logout
+        this.props.toggleUserInfo();
+        // Realizar logout
+        this.props.handleLogout();
+    };
+
     render() {
-        const { isAuthenticated, showUserInfo, toggleUserInfo, emailUsuario, handleLogout } = this.props;
+        const { isAuthenticated, showUserInfo, toggleUserInfo, emailUsuario } = this.props;
 
         return (
             <header className="text-white" style={{ backgroundColor: '#D6EFF6' }}>
@@ -48,7 +55,7 @@ class HeaderContainer extends Component {
                                     {showUserInfo && (
                                         <div className="panelUsuario text-white">
                                             <p>Bienvenido {emailUsuario || 'Correo no disponible'}</p>
-                                            <button className="btn btb m-2" onClick={handleLogout}>Logout</button>
+                                            <button className="btn btb m-2" onClick={this.handleLogoutClick}>Logout</button>
                                         </div>
                                     )}
                                 </div>

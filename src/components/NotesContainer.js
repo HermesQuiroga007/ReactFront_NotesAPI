@@ -1,5 +1,4 @@
 import React from 'react';
-import Swal from 'sweetalert2';
 import '../css/App.css';
 
 class NotesContainer extends React.Component {
@@ -8,52 +7,7 @@ class NotesContainer extends React.Component {
     this.state = {
       newNoteInput: ''
     };
-    this.alertTimer = null; // Guardar el temporizador en una variable de instancia
-    this.redirectTimer = null; // Guardar el temporizador de redirección en una variable de instancia
   }
-
-  componentDidMount() {
-    // Iniciar temporizador para mostrar la alerta después de 50 segundos
-    this.startAlertTimer();
-  }
-
-  componentWillUnmount() {
-    // Limpiar temporizadores al desmontar el componente
-    clearTimeout(this.alertTimer);
-    clearTimeout(this.redirectTimer);
-  }
-
-  startAlertTimer = () => {
-    this.alertTimer = setTimeout(() => {
-      // Mostrar la alerta con SweetAlert2
-      this.showSessionExpirationAlert();
-    }, 50000); // 50 segundos
-
-    this.redirectTimer = setTimeout(() => {
-      window.location.href = '/login'; // Cambia '/login' por la ruta de tu página de inicio de sesión
-    }, 62000); // 10 segundos después de que se muestre la alerta
-  };
-
-  handleLogout = () => {
-    // Limpiar temporizadores al hacer clic en el botón de "Logout"
-    clearTimeout(this.alertTimer);
-    clearTimeout(this.redirectTimer);
-    // Aquí debes agregar la lógica para cerrar sesión
-    // Por ejemplo, puedes llamar a una función en tu componente padre que maneje el proceso de cierre de sesión
-    // this.props.handleLogout();
-  };
-
-  showSessionExpirationAlert = () => {
-    // Mostrar la alerta con SweetAlert2
-    Swal.fire({
-      title: 'Sesión a punto de expirar',
-      text: 'Su sesión está a punto de expirar',
-      timer: 5000, // 5 segundos
-      icon: 'warning',
-      showCancelButton: false,
-      showConfirmButton: true
-    });
-  };
 
   render() {
     const { notes, addClick, deleteClick, updateClick } = this.props;

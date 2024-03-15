@@ -14,10 +14,10 @@ function Login({ onLogin }) {
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:5267/api/Auth/LoginUser', { email, password });
-      const { Token } = response.data;
+      const { Token, Expiracion } = response.data;
       localStorage.setItem('token', Token);
       setError('');
-      onLogin(Token, email);
+      onLogin(Token, email, new Date(Expiracion).getTime());
     } catch (err) {
       Swal.fire({
         icon: 'error',

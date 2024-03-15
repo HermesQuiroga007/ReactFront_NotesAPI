@@ -17,6 +17,7 @@ body {
   background-size: cover;
   background-position: top;
   background-repeat: no-repeat;
+  background-attachment: fixed; /* El fondo queda estatico */
 }
 
 #home {
@@ -27,6 +28,7 @@ body {
   height: auto !important;
   min-height: 100vh !important;
   overflow: auto !important;
+  background-attachment: fixed;
 }
 
 .btnout>p {
